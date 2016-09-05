@@ -3,33 +3,29 @@ import org.scalatest.{FlatSpec, Matchers}
 import sso._
 
 class MyServiceTest extends FlatSpec with Matchers {
+  val myService = new MyService(fakeSSO)
 
   "MyService" should "reject requests with invalid SSOTokens" in {
-    val myService = new MyService(fakeSSO)
     val response = myService.handleRequest(Request("Foo", SSOToken("")))
     response.text should be("Invalid Token")
   }
 
   "MyService" should "greet with valid SSOToken" in {
-    val myService = new MyService(fakeSSO)
     val response = myService.handleRequest(Request("Foo", SSOToken("valid")))
     response.text should be("Hello Foo!")
   }
 
   "MyService" should "allow to register a new session" in {
-    val myService = new MyService(fakeSSO)
     val response = myService.handleRequest(NewSessionRequest("user", "1234"))
     response.text should be("OK valid")
   }
 
   "MyService" should "return KO on invalid credentials" in {
-    val myService = new MyService(fakeSSO)
     val response = myService.handleRequest(NewSessionRequest("user", "badpass"))
     response.text should be("KO")
   }
 
   "MyService" should "allow to logout an user" in {
-    val myService = new MyService(fakeSSO)
     val response = myService.handleRequest(LogoutRequest(SSOToken("valid")))
     response.text should be("OK")
     fakeSSO.unregisterWasCalled should be(true)
