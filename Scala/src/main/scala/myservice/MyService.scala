@@ -4,12 +4,9 @@ import sso._
 
 class MyService(singleSignOnRegistry: SingleSignOnRegistry) {
 
-  def handleRequest(request: Request): Response = {
-    if (!singleSignOnRegistry.isValid(request.token)) {
-      Response("Invalid Token")
-    } else {
-      Response(s"Hello ${request.name}!")
-    }
+  def handleRequest(request: Request): Response = singleSignOnRegistry.isValid(request.token) match {
+    case true => Response(s"Hello ${request.name}!")
+    case false => Response("Invalid Token")
   }
 
   def handleRequest(request: NewSessionRequest): Response = {
