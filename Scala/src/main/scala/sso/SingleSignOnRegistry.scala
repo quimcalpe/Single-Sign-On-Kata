@@ -1,6 +1,5 @@
 package sso
 
-
 trait SingleSignOnRegistry {
 
   def registerNewSession(username: String, password: String): SSOToken

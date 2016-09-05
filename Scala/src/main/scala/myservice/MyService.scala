@@ -1,13 +1,16 @@
 package myservice
 
-import sso.Request;
-import sso.Response;
-import sso.SingleSignOnRegistry;
-
+import sso.Request
+import sso.Response
+import sso.SingleSignOnRegistry
 
 class MyService(singleSignOnRegistry: SingleSignOnRegistry) {
 
   def handleRequest(request: Request): Response = {
-    Response(s"hello ${request.name}!")
+    if (!singleSignOnRegistry.isValid(request.token)) {
+      Response("Invalid Token")
+    } else {
+      Response(s"Hello ${request.name}!")
+    }
   }
 }
