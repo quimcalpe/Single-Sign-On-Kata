@@ -3,6 +3,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import sso._
 
 class MyServiceTest extends FlatSpec with Matchers {
+
   val myService = new MyService(fakeSSO)
 
   "MyService" should "reject requests with invalid SSOTokens" in {
@@ -30,11 +31,10 @@ class MyServiceTest extends FlatSpec with Matchers {
     response.text should be("OK")
     fakeSSO.unregisterWasCalled should be(true)
   }
-
-
 }
 
 object fakeSSO extends SingleSignOnRegistry {
+
   var unregisterWasCalled: Boolean = false
 
   override def isValid(token: SSOToken): Boolean = token.uuid match {
